@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, createNewPost, logOut } from "../fbase";
+import { auth, createNewPost, fetchPosts, logOut } from "../fbase";
 import Post from "./Post";
 
 const Home = () => {
   const [user, loading, /* error */ ] = useAuthState(auth);
   const [postText, setPostText] = useState("");
+  const [allPosts, setAllPosts] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,9 +35,21 @@ const Home = () => {
           <button
             className="create_post__btn"
             onClick={() => {
-              createNewPost(postText);
+              user.reload();
+              let currentdate = new Date(); 
+              var datetime = "Last Sync: " + (currentdate.getMonth() + 1) + "/"
+                + currentdate.getDate()  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+              createNewPost(postText, datetime, user);
               alert("successfully created new post in Firestore db!");
               // and refresh <Posts /> with new content when it finishes updating the Firestore db
+              setAllPosts(fetchPosts());
+              console.log("All Posts from Firestore:", allPosts);
+              alert("All Posts from Firestore:", allPosts);
+              user.reload();
             }}
           >Create Post</button>
         </div>
@@ -49,7 +62,8 @@ const Home = () => {
             <li className="post"><Post content="Blog Post 4" /></li>
             <li className="post"><Post content="Blog Post 5" /></li>
           </ul>
-      </div>
+          <h4>Posts in Firestore Rendered Here!</h4>
+        </div>
       </div>
       <div>
         <button className="logout__btn" onClick={logOut}>Log Out</button>
