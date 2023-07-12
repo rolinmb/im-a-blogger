@@ -20,7 +20,7 @@ const Home = () => {
   return (
     <div className="home-page">
       <div className="home__container">
-        <h3>Home Page You Are Logged In!</h3>
+        <h3>You Are Logged In!</h3>
         <Posts />
       </div>
       <div>

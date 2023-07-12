@@ -21,6 +21,7 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="login__container">
+        <h3>You Are Logged Out!</h3>
         <input
           type="text"
           className="login__textBox"
