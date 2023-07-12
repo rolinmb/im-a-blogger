@@ -160,10 +160,35 @@ const logOut = () => {
   signOut(auth);
 }
 
+const createNewPost = (text) => {
+  var currentdate = new Date(); 
+  var datetime = "Last Sync: " + currentdate.getDate() + "/"
+    + (currentdate.getMonth()+1)  + "/" 
+    + currentdate.getFullYear() + " @ "  
+    + currentdate.getHours() + ":"  
+    + currentdate.getMinutes() + ":" 
+    + currentdate.getSeconds();
+  try {
+    addDoc(collection(db, "posts"), {
+      content: text,
+      timestamp: datetime
+    });
+  } catch (err) {
+    switch (err.code) {
+      default:
+        console.error(err.message);
+        alert(err.message);
+        break;
+    }
+  }
+}
+
 export {
   auth, db,
+  createNewPost,
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
-  sendPasswordReset, logOut
+  sendPasswordReset,
+  logOut
 };

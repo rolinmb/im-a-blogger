@@ -11,7 +11,7 @@ const Login = () => {
   
   useEffect(() => {
     if (loading) {
-      return;
+      return; // render page loading content here
     }
     if (user) {
       navigate("/home");
