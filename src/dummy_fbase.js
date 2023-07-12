@@ -156,22 +156,13 @@ const sendPasswordReset = async (email) => {
   }
 }
 
-const logOut = () => {
-  signOut(auth);
-}
-
-const createNewPost = (text) => {
-  var currentdate = new Date(); 
-  var datetime = "Last Sync: " + currentdate.getDate() + "/"
-    + (currentdate.getMonth()+1)  + "/" 
-    + currentdate.getFullYear() + " @ "  
-    + currentdate.getHours() + ":"  
-    + currentdate.getMinutes() + ":" 
-    + currentdate.getSeconds();
+const createNewPost = async (textContent, postId, username) => {
   try {
     addDoc(collection(db, "posts"), {
-      content: text,
-      timestamp: datetime
+      postID: postId,
+      creator: String(username),
+      timestamp: postId,
+      content: textContent,
     });
   } catch (err) {
     switch (err.code) {
@@ -183,9 +174,16 @@ const createNewPost = (text) => {
   }
 }
 
+const fetchPosts = async () => {
+  const snapshot = await getDocs(collection(db, "posts"));
+  return snapshot;
+}
+
 export {
-  auth, db,
+  auth,
+  db,
   createNewPost,
+  fetchPosts,
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
